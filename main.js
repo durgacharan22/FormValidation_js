@@ -18,9 +18,12 @@ var validating_input = function (v, element_name, str_duplicate) {
 
 var storage_local = function (name, email, password, address, phone, gender) {
     var array = JSON.parse(localStorage.getItem("third")) || [];
-    array.push({ name, email, password, address, phone, gender });
-    localStorage.setItem('third', JSON.stringify(array));
+    if (name != undefined) {
+        array.push({ name, email, password, address, phone, gender });
+        localStorage.setItem('third', JSON.stringify(array));
+    }
     var tb = "<table border = '1'>";
+    tb += "<tr><td>Name</td><td>Email</td><td>Password</td><td>address</td><td>Phone</td><td>Gender</td></tr>"
     for (var i = 0; i < array.length; i++) {
         tb += "<tr>";
         tb += "<td>" + array[i].name + "</td>";
@@ -34,7 +37,7 @@ var storage_local = function (name, email, password, address, phone, gender) {
     tb += "</table>";
     document.getElementById("table").innerHTML = tb;
 }
-
+window.onload = storage_local();
 document.getElementById("bt").addEventListener("click", function () {
     var name = document.getElementById("name").value;
     var email = document.getElementById("email").value;
@@ -43,12 +46,17 @@ document.getElementById("bt").addEventListener("click", function () {
     var phone = document.getElementById("phone").value;
     var genders = document.getElementsByName("gender");
     var gender;
-    if(genders[0].checked == true){
+    if (genders[0].checked == true) {
         gender = "male";
-    }else if(genders[1].checked == true){
+        document.getElementsByName("gender")[0].checked = false;
+    } else if (genders[1].checked == true) {
         gender = "female";
-    }else{
+        document.getElementsByName("gender")[1].checked = false;
+    } else {
         gender = "";
+    }
+    for (var i = 0; i <= 4; i++) {
+        document.getElementsByTagName("input")[i].value = '';
     }
     var a = validating_input(name, "Name", "name_dup");
     var b = validating_input(email, "Email", "email_dup");
@@ -56,7 +64,7 @@ document.getElementById("bt").addEventListener("click", function () {
     var d = validating_input(address, "Address", "add_dup");
     var e = validating_input(phone, "Phone", "phone_dup");
     var f = validating_input(gender, "Gender", "gender_dup")
-    if (a === "No Input" || b === "No Input" || c === "No Input" || d === "No Input" || e === "No Input" || f ==="No Input") {
+    if (a === "No Input" || b === "No Input" || c === "No Input" || d === "No Input" || e === "No Input" || f === "No Input") {
         console.log("No Input")
     }
     else {
